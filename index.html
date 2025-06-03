@@ -1,35 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-        <script>
-                        document.getElementById('opinionForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-        
-            const playerName = document.getElementById('playerName').value;
-            const opinionText = document.getElementById('opinionText').value;
-        
-            // Send an event to GA4
-            gtag('event', 'submit_opinion', {
-                'player_name': playerName, // Matches the event parameter name from Step 1
-                'opinion_text': opinionText // Matches the event parameter name from Step 2
-            });
-        
-            document.getElementById('submittedPlayerName').textContent = playerName;
-            document.getElementById('submittedText').textContent = opinionText;
-            document.getElementById('submittedOpinion').style.display = 'block';
-        
-            document.getElementById('playerName').value = '';
-            document.getElementById('opinionText').value = '';
-        });
-        </script>
-        <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-1ST2PXGD9S"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-    
-      gtag('config', 'G-1ST2PXGD9S');
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-1ST2PXGD9S');
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -68,7 +46,8 @@
             font-weight: 600;
         }
         input[type="text"],
-        textarea {
+        textarea,
+        select { /* Added style for the select dropdown */
             width: calc(100% - 20px);
             padding: 10px;
             margin-bottom: 20px;
@@ -129,6 +108,17 @@
                 <input type="text" id="playerName" name="playerName" placeholder="Enter player's name">
             </div>
             <div>
+                <label for="opinionCategory">Opinion Category:</label>
+                <select id="opinionCategory" name="opinionCategory">
+                    <option value="">Select Category</option>
+                    <option value="Player Performance">Player Performance</option>
+                    <option value="Team Strategy">Team Strategy</option>
+                    <option value="Match Analysis">Match Analysis</option>
+                    <option value="Controversial Decisions">Controversial Decisions</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div>
                 <label for="opinionText">Your Thoughts:</label>
                 <textarea id="opinionText" name="opinionText" placeholder="Share your opinion about the player"></textarea>
             </div>
@@ -137,7 +127,8 @@
 
         <div id="submittedOpinion" style="display: none;">
             <h2>Your Feedback:</h2>
-            <p><strong id="submittedPlayerName"></strong></p>
+            <p><strong>Player:</strong> <span id="submittedPlayerName"></span></p>
+            <p><strong>Category:</strong> <span id="submittedCategory"></span></p>
             <p id="submittedText"></p>
         </div>
     </div>
@@ -148,13 +139,22 @@
 
             const playerName = document.getElementById('playerName').value;
             const opinionText = document.getElementById('opinionText').value;
+            const opinionCategory = document.getElementById('opinionCategory').value;
+
+            gtag('event', 'submit_opinion', {
+                'player_name': playerName,
+                'opinion_text': opinionText,
+                'opinion_category': opinionCategory
+            });
 
             document.getElementById('submittedPlayerName').textContent = playerName;
             document.getElementById('submittedText').textContent = opinionText;
+            document.getElementById('submittedCategory').textContent = opinionCategory;
             document.getElementById('submittedOpinion').style.display = 'block';
 
             document.getElementById('playerName').value = '';
             document.getElementById('opinionText').value = '';
+            document.getElementById('opinionCategory').value = '';
         });
     </script>
 </body>
