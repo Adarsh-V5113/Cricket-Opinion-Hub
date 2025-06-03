@@ -1,18 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-      <!-- Google tag (gtag.js) -->
-      <script async src="https://www.googletagmanager.com/gtag/js?id=G-C60W7E8T4D"></script>
-      <script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-C60W7E8T4D"></script>
+    <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-      
         gtag('config', 'G-C60W7E8T4D');
-      </script>
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cricket Opinion Hub</title>
+    <title>CricTalk</title>
     <style>
         body {
             background: linear-gradient(to bottom, #e0f2f7, #c8e6c9); /* Pale green gradient */
@@ -98,6 +96,9 @@
             font-weight: 600;
             color: #333;
         }
+        #otherCategoryInput {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -119,6 +120,10 @@
                     <option value="Other">Other</option>
                 </select>
             </div>
+            <div id="otherCategoryInput">
+                <label for="otherCategoryText">Specify Category:</label>
+                <input type="text" id="otherCategoryText" name="otherCategoryText" placeholder="Enter the category">
+            </div>
             <div>
                 <label for="opinionText">Your Thoughts:</label>
                 <textarea id="opinionText" name="opinionText" placeholder="Share your opinion about the player"></textarea>
@@ -135,12 +140,31 @@
     </div>
 
     <script>
-        document.getElementById('opinionForm').addEventListener('submit', function(event) {
+        const opinionForm = document.getElementById('opinionForm');
+        const playerNameInput = document.getElementById('playerName');
+        const opinionTextInput = document.getElementById('opinionText');
+        const opinionCategorySelect = document.getElementById('opinionCategory');
+        const otherCategoryInputDiv = document.getElementById('otherCategoryInput');
+        const otherCategoryTextInput = document.getElementById('otherCategoryText');
+        const submittedPlayerNameSpan = document.getElementById('submittedPlayerName');
+        const submittedCategorySpan = document.getElementById('submittedCategory');
+        const submittedTextParagraph = document.getElementById('submittedText');
+        const submittedOpinionDiv = document.getElementById('submittedOpinion');
+
+        opinionCategorySelect.addEventListener('change', function() {
+            otherCategoryInputDiv.style.display = this.value === 'Other' ? 'block' : 'none';
+        });
+
+        opinionForm.addEventListener('submit', function(event) {
             event.preventDefault();
 
-            const playerName = document.getElementById('playerName').value;
-            const opinionText = document.getElementById('opinionText').value;
-            const opinionCategory = document.getElementById('opinionCategory').value;
+            const playerName = playerNameInput.value;
+            const opinionText = opinionTextInput.value;
+            let opinionCategory = opinionCategorySelect.value;
+
+            if (opinionCategory === 'Other') {
+                opinionCategory = otherCategoryTextInput.value;
+            }
 
             gtag('event', 'submit_opinion', {
                 'player_name': playerName,
@@ -148,14 +172,16 @@
                 'opinion_category': opinionCategory
             });
 
-            document.getElementById('submittedPlayerName').textContent = playerName;
-            document.getElementById('submittedText').textContent = opinionText;
-            document.getElementById('submittedCategory').textContent = opinionCategory;
-            document.getElementById('submittedOpinion').style.display = 'block';
+            submittedPlayerNameSpan.textContent = playerName;
+            submittedTextParagraph.textContent = opinionText;
+            submittedCategorySpan.textContent = opinionCategory;
+            submittedOpinionDiv.style.display = 'block';
 
-            document.getElementById('playerName').value = '';
-            document.getElementById('opinionText').value = '';
-            document.getElementById('opinionCategory').value = '';
+            playerNameInput.value = '';
+            opinionTextInput.value = '';
+            opinionCategorySelect.value = '';
+            otherCategoryTextInput.value = '';
+            otherCategoryInputDiv.style.display = 'none';
         });
     </script>
 </body>
