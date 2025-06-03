@@ -1,6 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+        <script>
+                        document.getElementById('opinionForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+        
+            const playerName = document.getElementById('playerName').value;
+            const opinionText = document.getElementById('opinionText').value;
+        
+            // Send an event to GA4
+            gtag('event', 'submit_opinion', {
+                'player_name': playerName, // Matches the event parameter name from Step 1
+                'opinion_text': opinionText // Matches the event parameter name from Step 2
+            });
+        
+            document.getElementById('submittedPlayerName').textContent = playerName;
+            document.getElementById('submittedText').textContent = opinionText;
+            document.getElementById('submittedOpinion').style.display = 'block';
+        
+            document.getElementById('playerName').value = '';
+            document.getElementById('opinionText').value = '';
+        });
+        </script>
         <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-1ST2PXGD9S"></script>
     <script>
